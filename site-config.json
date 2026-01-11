@@ -1,0 +1,48 @@
+{
+  "company": {
+    "name": "Ponteggi Srls",
+    "address": "Via dell'Industria 5",
+    "zip": "60027",
+    "city": "Osimo Stazione",
+    "province": "AN",
+    "email": "amministrazione@ponteggisrl.it",
+    "piva": "12345678901",
+    "phones": [
+      "+39 345 321 8897",
+      "+39 351 520 3421"
+    ],
+    "openingHours": "Lun - Ven: 08:30 - 18:00"
+  },
+  "services": [
+    "Montaggio Ponteggi",
+    "Noleggio Attrezzature",
+    "Ristrutturazione",
+    "Altro"
+  ],
+  "portfolio": [
+    {
+      "id": 1,
+      "title": " ",
+      "category": " ",
+      "image": "./images/cantiere-1.jpg"
+    },
+    {
+      "id": 2,
+      "title": " ",
+      "category": " ",
+      "image": "./images/cantiere-2.jpg"
+    },
+    {
+      "id": 3,
+      "title": " ",
+      "category": " ",
+      "image": "./images/cantiere-3.jpg"
+    },
+    {
+      "id": 4,
+      "title": " ",
+      "category": " ",
+      "image": "./images/cantiere-storico.jpg"
+    }
+  ]
+}
