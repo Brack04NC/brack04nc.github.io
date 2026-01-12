@@ -70,5 +70,12 @@
     "cookies": "<h3>Cosa sono i Cookie</h3>\n<p>I cookie sono piccoli file di testo che i siti visitati dagli utenti inviano ai loro terminali.</p>\n<h3>Tipologie utilizzate</h3>\n<p>Utilizziamo cookie tecnici strettamente necessari per il funzionamento del sito e cookie di terze parti (es. Google Maps) per migliorare l'esperienza utente.</p>\n<h3>Gestione</h3>\n<p>Puoi gestire le preferenze sui cookie direttamente dalle impostazioni del tuo browser.</p>",
     "terms": "<h3>1. Introduzione</h3>\n<p>Il presente sito web è di proprietà di <strong>{company_name}</strong>. L'utilizzo del sito implica l'accettazione dei presenti Termini.</p>\n<h3>2. Proprietà Intellettuale</h3>\n<p>Tutti i contenuti (testi, immagini, logo) sono di proprietà esclusiva dell'azienda. È vietata la riproduzione non autorizzata.</p>\n<h3>3. Limitazione di Responsabilità</h3>\n<p>L'azienda si impegna a fornire informazioni accurate ma non garantisce l'assenza di errori.</p>"
   },
-  "customPages": []
+  "customPages": [
+    {
+      "id": 1768255112311,
+      "title": "Prova",
+      "slug": "test",
+      "content": "<h1>Nuova Pagina</h1>\n<p>Scrivi qui il tuo contenuto...</p>"
+    }
+  ]
 }
