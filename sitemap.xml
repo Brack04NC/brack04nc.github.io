@@ -2,8 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://ponteggisrl.it/</loc>
-      <lastmod>2026-01-01</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>1.00</priority>
+      <lastmod>2026-07-21</lastmod>
+   </url>
+   <url>
+      <loc>https://ponteggisrl.it/ponteggi-osimo.html</loc>
+      <lastmod>2026-07-21</lastmod>
+   </url>
+   <url>
+      <loc>https://ponteggisrl.it/ponteggi-ancona.html</loc>
+      <lastmod>2026-07-21</lastmod>
+   </url>
+   <url>
+      <loc>https://ponteggisrl.it/ponteggi-marche.html</loc>
+      <lastmod>2026-07-21</lastmod>
+   </url>
+   <url>
+      <loc>https://ponteggisrl.it/ponteggi-edilizia.html</loc>
+      <lastmod>2026-07-21</lastmod>
    </url>
 </urlset>
