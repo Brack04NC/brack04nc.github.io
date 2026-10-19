@@ -1,0 +1,12 @@
+{
+  "sito": "Ponteggi Srls",
+  "revisione": 12,
+  "data": "2026-10-20",
+  "amministrazione": "amministrazione.html",
+  "gestionale": "amministrazione/index.html",
+  "backend": "Supabase",
+  "supabase_configurato": true,
+  "account_amministratore": "da_creare_e_abilitare",
+  "migrazione_v11": "applicata_20261019223351",
+  "ordine_anagrafiche": "allineato_all_allegato"
+}
