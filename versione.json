@@ -1,6 +1,6 @@
 {
   "sito": "Ponteggi Srls",
-  "revisione": 13,
+  "revisione": 14,
   "data": "2026-10-20",
   "amministrazione": "amministrazione.html",
   "gestionale": "amministrazione/index.html",
@@ -9,11 +9,11 @@
   "account_amministratore": "da_creare_e_abilitare",
   "migrazione_v11": "applicata_20261019223351",
   "ordine_anagrafiche": "allineato_all_allegato",
-  "revision": 13,
+  "revision": 14,
   "date": "2026-10-20",
   "public_project_pages": 14,
-  "performance": "Hero e miniature AVIF/WebP, mappa differita; carosello v12 ripristinato a 20 px/s, foto lazy native",
+  "performance": "CSS iniziale inline con hash CSP; foglio completo non bloccante in home; badge immediato; letture layout raggruppate; carosello continuo 20 px/s preservato",
   "h1": "invariato",
-  "patch": "13.1",
-  "versione": "13.1"
+  "patch": "14.0",
+  "versione": "14.0"
 }

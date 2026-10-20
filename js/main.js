@@ -1,28 +1,34 @@
 /* Ponteggi Srls — interazioni progressive, senza dipendenze. */
 "use strict";
+// Legge la posizione prima di invalidare gli stili del documento.
+const initialScrollY = window.scrollY;
 document.documentElement.classList.remove("no-js");
+function initializeSite() {
 const header = document.querySelector(".site-header");
 const headerContent = header?.querySelector(".header-content");
 let headerCompact = null, measuredHeaderHeight = 0;
 function updateHeader() {
-  const compact = window.scrollY > 20;
+  const compact = (headerCompact === null ? initialScrollY : window.scrollY) > 20;
   if (compact === headerCompact) return;
   headerCompact = compact; header?.classList.toggle("is-scrolled", compact);
 }
-function measureCompactHeader() {
+function measureCompactHeader(contentHeight) {
   if (!header || !headerContent) return;
   const styles = getComputedStyle(header);
   const padding = parseFloat(styles.getPropertyValue("--header-padding-scrolled")) || 8;
   const borders = (parseFloat(styles.borderTopWidth) || 0) + (parseFloat(styles.borderBottomWidth) || 0);
-  const height = headerContent.getBoundingClientRect().height + padding * 2 + borders;
+  const height = (typeof contentHeight === "number" ? contentHeight : headerContent.getBoundingClientRect().height) + padding * 2 + borders;
   if (Math.abs(height - measuredHeaderHeight) < .5) return;
   measuredHeaderHeight = height;
   document.documentElement.style.setProperty("--header-height", `${height}px`);
 }
-updateHeader(); measureCompactHeader();
+updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 window.addEventListener("resize", measureCompactHeader);
-if (headerContent && window.ResizeObserver) new ResizeObserver(measureCompactHeader).observe(headerContent);
+if (headerContent && window.ResizeObserver) {
+  // ResizeObserver consegna le dimensioni dopo il layout, senza forzarne uno nuovo.
+  new ResizeObserver(entries => measureCompactHeader(entries[0].contentRect.height)).observe(headerContent);
+} else { requestAnimationFrame(() => measureCompactHeader()); }
 
 /* Il fallback <details> resta disponibile senza JS. Il pannello aperto
    rende inerti i rami esterni e mantiene Tab nei controlli del menu. */
@@ -262,13 +268,13 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
   function renderControls(force = false) {
     const index = starts.reduce((best, left, i) => position + .5 >= left ? i : best, 0);
     if (index === current && !force) return;
+    // Tutte le letture precedono le modifiche a testo e attributi.
+    const active = dots.children[index];
+    const dotViewport = active && dots.scrollTo ? dots.clientWidth : 0;
+    const dotLeft = dotViewport ? active.getBoundingClientRect().left - dots.getBoundingClientRect().left + dots.scrollLeft - (dotViewport - active.offsetWidth) / 2 : 0;
     current = index; counter.textContent = `${index + 1} / ${cards.length}`; counter.setAttribute('aria-live', 'off');
     [...dots.children].forEach((dot, i) => dot.setAttribute('aria-pressed', String(i === index)));
-    const active = dots.children[index];
-    if (active && dots.scrollTo && dots.clientWidth) {
-      const left = active.getBoundingClientRect().left - dots.getBoundingClientRect().left + dots.scrollLeft - (dots.clientWidth - active.offsetWidth) / 2;
-      dots.scrollTo({left: Math.max(0, left), behavior: reduced.matches ? 'instant' : 'smooth'});
-    }
+    if (dotViewport) dots.scrollTo({left: Math.max(0, dotLeft), behavior: reduced.matches ? 'instant' : 'smooth'});
   }
   function writePosition() {
     position = normalize(position);
@@ -421,3 +427,20 @@ if (form && window.fetch) {
 document.querySelectorAll("[data-current-year]").forEach(element => { element.textContent = new Date().getFullYear(); });
 const legacyPages = { "#/privacy": "/privacy.html", "#/cookie-policy": "/cookie-policy.html", "#/termini-condizioni": "/termini-condizioni.html" };
 if (legacyPages[location.hash]) location.replace(legacyPages[location.hash]);
+
+}
+
+// Solo la home carica il foglio completo senza bloccare la prima schermata.
+// Attende il CSS prima di misurare il carosello; nessun gestore inline nella CSP.
+const deferredStyles = document.getElementById('deferred-styles');
+if (deferredStyles) {
+  let started = false;
+  const activateStyles = () => {
+    if (started) return;
+    started = true; deferredStyles.media = 'all'; initializeSite();
+  };
+  deferredStyles.addEventListener('load', activateStyles, {once: true});
+  deferredStyles.addEventListener('error', activateStyles, {once: true});
+  window.addEventListener('load', activateStyles, {once: true});
+  if (deferredStyles.sheet || document.readyState === 'complete') activateStyles();
+} else { initializeSite(); }
