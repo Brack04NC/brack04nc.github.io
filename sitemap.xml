@@ -2,63 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ponteggisrl.it/ponteggi-ancona.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://ponteggisrl.it/images/portfolio-07-cantiere-ponteggi.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://ponteggisrl.it/cookie-policy.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://ponteggisrl.it/ponteggi-marche.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://ponteggisrl.it/images/portfolio-06-ponteggio-offagna.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://ponteggisrl.it/ponteggi-edilizia.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://ponteggisrl.it/privacy.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://ponteggisrl.it/ponteggi-osimo.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://ponteggisrl.it/images/portfolio-05-ponteggio-restauro-chiesa-osimo.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://ponteggisrl.it/termini-condizioni.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://ponteggisrl.it/</loc>
-    <lastmod>2026-10-19</lastmod>
-  
-    <image:image><image:loc>https://ponteggisrl.it/images/cantiere-1.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/cantiere-2.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/cantiere-3.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/cantiere-storico.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-05-ponteggio-restauro-chiesa-osimo.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-06-ponteggio-offagna.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-07-cantiere-ponteggi.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-08-ponteggio-sicurezza.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-09-ponteggio-condominio.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-10-ponteggio-perfetto.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-11-ristrutturazione-palazzo.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-12-ponteggio-palazzina.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-13-ponteggio-municipio.jpg</image:loc></image:image>
-    <image:image><image:loc>https://ponteggisrl.it/images/portfolio-14-ponteggio-ristrutturazione.jpg</image:loc></image:image>
+    <lastmod>2026-10-20</lastmod>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-2.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-3.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-storico.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-05-ponteggio-restauro-chiesa-osimo.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-06-ponteggio-offagna.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-07-cantiere-ponteggi.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-08-ponteggio-sicurezza.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-09-ponteggio-condominio.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-10-ponteggio-perfetto.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-11-ristrutturazione-palazzo.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-12-ponteggio-palazzina.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-13-ponteggio-municipio.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-14-ponteggio-ristrutturazione.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://ponteggisrl.it/cantieri.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://ponteggisrl.it/images/cantiere-1.jpg</image:loc>
     </image:image>
@@ -104,16 +131,100 @@
   </url>
   <url>
     <loc>https://ponteggisrl.it/cantiere-restauro-chiesa-osimo.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://ponteggisrl.it/images/portfolio-05-ponteggio-restauro-chiesa-osimo.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://ponteggisrl.it/cantiere-ponteggio-offagna.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://ponteggisrl.it/images/portfolio-06-ponteggio-offagna.jpg</image:loc>
     </image:image>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ponteggio-roma.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-1.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-condominio-san-biagio.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-2.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ponteggio-catania.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-3.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-complesso-edilizio-offagna.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/cantiere-storico.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ponteggio-edificio-multipiano.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-07-cantiere-ponteggi.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-facciata-teli-protezione.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-08-ponteggio-sicurezza.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ponteggio-condominio-multipiano.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-09-ponteggio-condominio.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-schermatura-facciata-ponteggio.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-10-ponteggio-perfetto.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ristrutturazione-palazzo.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-11-ristrutturazione-palazzo.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ponteggio-palazzina.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-12-ponteggio-palazzina.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ponteggio-municipio.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-13-ponteggio-municipio.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ponteggisrl.it/cantiere-ponteggio-ristrutturazione-edificio.html</loc>
+    <image:image>
+      <image:loc>https://ponteggisrl.it/images/portfolio-14-ponteggio-ristrutturazione.jpg</image:loc>
+    </image:image>
+    <lastmod>2026-10-20</lastmod>
   </url>
 </urlset>

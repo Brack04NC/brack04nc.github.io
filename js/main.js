@@ -3,13 +3,20 @@
 document.documentElement.classList.remove("no-js");
 const header = document.querySelector(".site-header");
 const headerContent = header?.querySelector(".header-content");
-function updateHeader() { header?.classList.toggle("is-scrolled", window.scrollY > 20); }
+let headerCompact = null, measuredHeaderHeight = 0;
+function updateHeader() {
+  const compact = window.scrollY > 20;
+  if (compact === headerCompact) return;
+  headerCompact = compact; header?.classList.toggle("is-scrolled", compact);
+}
 function measureCompactHeader() {
   if (!header || !headerContent) return;
   const styles = getComputedStyle(header);
   const padding = parseFloat(styles.getPropertyValue("--header-padding-scrolled")) || 8;
   const borders = (parseFloat(styles.borderTopWidth) || 0) + (parseFloat(styles.borderBottomWidth) || 0);
   const height = headerContent.getBoundingClientRect().height + padding * 2 + borders;
+  if (Math.abs(height - measuredHeaderHeight) < .5) return;
+  measuredHeaderHeight = height;
   document.documentElement.style.setProperty("--header-height", `${height}px`);
 }
 updateHeader(); measureCompactHeader();
@@ -146,7 +153,7 @@ if (photoDialog && typeof photoDialog.showModal === "function" && photoLinks.len
     photoIndex = (index + photoLinks.length) % photoLinks.length;
     const link = photoLinks[photoIndex];
     const card = link.closest(".project-card, .local-photo");
-    const sourceImage = link.querySelector("img");
+    const sourceImage = link.querySelector("img") || link.querySelector("template")?.content.querySelector("img");
     photoTitle.textContent = card.querySelector("[data-photo-title], h3, h2").textContent.trim();
     photoDescription.textContent = card.querySelector("[data-photo-description], .project-description, figcaption p").textContent.trim();
     photoCount.textContent = `Foto ${photoIndex + 1} di ${photoLinks.length}`;
@@ -206,6 +213,17 @@ if (photoDialog && typeof photoDialog.showModal === "function" && photoLinks.len
   });
 }
 
+/* Mappa: nessuna richiesta a Google finché la sezione è lontana.
+   Senza JS resta disponibile l'iframe lazy nel fallback noscript. */
+document.querySelectorAll('iframe[data-map-src]').forEach(map => {
+  const load = () => { map.src = map.dataset.mapSrc; delete map.dataset.mapSrc; };
+  if (!window.IntersectionObserver) { load(); return; }
+  const observer = new IntersectionObserver(entries => {
+    if (entries.some(entry => entry.isIntersecting)) { load(); observer.disconnect(); }
+  }, {rootMargin: '400px 0px'});
+  observer.observe(map);
+});
+
 /* Nastro continuo: velocità costante in pixel al secondo, senza soste.
    Una copia visiva delle card chiude il ciclo mantenendo i 14 originali. */
 document.querySelectorAll('[data-carousel]').forEach(carousel => {
@@ -217,7 +235,7 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
   const dots = carousel.querySelector('[data-carousel-dots]');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const SPEED = 20;
-  let cycle = 0, position = 0, expected = 0, starts = [], current = -1;
+  let cycle = 0, viewport = 0, position = 0, expected = 0, starts = [], current = -1;
   let frameId = 0, lastTime = null, resizeTimer = null, interacting = false;
   carousel.dataset.continuous = 'true';
 
@@ -226,15 +244,13 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
     if (photoDialog && typeof photoDialog.showModal === 'function') {event.preventDefault(); card.querySelector('[data-photo]').click();}
   }
   const copies = cards.map((card, i) => {
-    card.setAttribute('role', 'group'); card.setAttribute('aria-roledescription', 'diapositiva'); card.setAttribute('aria-label', `${i + 1} di ${cards.length}`);
-    card.querySelector('[data-project-open]')?.addEventListener('click', event => openPhoto(event, card));
     const copy = card.cloneNode(true);
-    copy.dataset.carouselClone = String(i); copy.setAttribute('aria-hidden', 'true'); copy.setAttribute('role', 'presentation');
+    copy.dataset.carouselClone = String(i); copy.setAttribute('aria-hidden', 'true');
     copy.removeAttribute('id'); copy.removeAttribute('aria-label'); copy.removeAttribute('aria-roledescription');
     copy.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
     copy.querySelectorAll('[aria-describedby]').forEach(element => element.removeAttribute('aria-describedby'));
-    copy.querySelectorAll('.project-photo, [data-project-open]').forEach(link => {
-      link.removeAttribute('data-photo'); link.removeAttribute('data-project-open');
+    copy.querySelectorAll('.project-photo').forEach(link => {
+      link.removeAttribute('data-photo');
       link.addEventListener('click', event => openPhoto(event, card));
     });
     copy.querySelectorAll('a, button, [tabindex]').forEach(element => element.setAttribute('tabindex', '-1'));
@@ -263,7 +279,7 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
   }
   function frame(now) {
     frameId = 0;
-    if (document.hidden || cycle <= track.clientWidth || cards.length < 2) {lastTime = null; return;}
+    if (document.hidden || cycle <= viewport || cards.length < 2) {lastTime = null; return;}
     const elapsed = lastTime === null ? 0 : Math.min(64, Math.max(0, now - lastTime));
     lastTime = now;
     if (!interacting) {
@@ -273,17 +289,18 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
     frameId = requestAnimationFrame(frame);
   }
   function start() {
-    if (frameId || document.hidden || cycle <= track.clientWidth || cards.length < 2) return;
+    if (frameId || document.hidden || cycle <= viewport || cards.length < 2) return;
     lastTime = null; frameId = requestAnimationFrame(frame);
   }
   function measure() {
     const fraction = cycle ? position / cycle : 0;
+    viewport = track.clientWidth;
     const first = cards[0].getBoundingClientRect();
     starts = cards.map(card => card.getBoundingClientRect().left - first.left);
     cycle = copies[0].getBoundingClientRect().left - first.left;
     // Il fallback consente l'avvio anche quando la copia non è ancora misurabile.
     if (cycle <= 0) cycle = cards.length > 1 ? starts[1] * cards.length : first.width;
-    controls.hidden = cycle <= track.clientWidth || cards.length < 2;
+    controls.hidden = cycle <= viewport || cards.length < 2;
     position = fraction * cycle; current = -1;
     writePosition(); lastTime = null; start();
   }
