@@ -335,7 +335,7 @@ body:has(.mobile-menu[open]) { overflow: hidden; }
 
 .section-heading--centered { max-width: 672px; margin: 0 auto 64px; text-align: center; }
 
-.eyebrow { margin-bottom: 12px; color: #715700; font-size: 14px; line-height: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.eyebrow { margin-bottom: 12px; color: #facc15; font-size: 14px; line-height: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
 
 .section-title { font-size: 30px; line-height: 36px; font-weight: 700; }
 
