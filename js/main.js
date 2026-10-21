@@ -150,6 +150,7 @@ if (photoDialog && typeof photoDialog.showModal === "function" && photoLinks.len
   const photoTitle = photoDialog.querySelector("#photo-title");
   const photoDescription = photoDialog.querySelector("#photo-description");
   const photoCount = photoDialog.querySelector("[data-photo-count]");
+  const photoCase = photoDialog.querySelector("[data-photo-case]");
   const photoRetry = photoDialog.querySelector("[data-photo-retry]");
   const photoError = photoDialog.querySelector(".photo-error");
   const photoLoading = photoDialog.querySelector("[data-photo-loading]");
@@ -162,6 +163,16 @@ if (photoDialog && typeof photoDialog.showModal === "function" && photoLinks.len
     const sourceImage = link.querySelector("img") || link.querySelector("template")?.content.querySelector("img");
     photoTitle.textContent = card.querySelector("[data-photo-title], h3, h2").textContent.trim();
     photoDescription.textContent = card.querySelector("[data-photo-description], .project-description, figcaption p").textContent.trim();
+    if (photoCase) {
+      const caseLink = card.querySelector('.project-case-link');
+      photoCase.hidden = !caseLink;
+      if (caseLink) {
+        photoCase.href = caseLink.href;
+        photoCase.setAttribute('aria-label', 'Scheda cantiere: ' + photoTitle.textContent);
+      } else {
+        photoCase.removeAttribute('href'); photoCase.removeAttribute('aria-label');
+      }
+    }
     photoCount.textContent = `Foto ${photoIndex + 1} di ${photoLinks.length}`;
     photoImage.alt = sourceImage.alt;
     photoImage.width = Number(sourceImage.getAttribute("width")); photoImage.height = Number(sourceImage.getAttribute("height"));

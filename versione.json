@@ -1,21 +1,5 @@
 {
-  "sito": "Ponteggi Srls",
-  "revisione": 15,
+  "versione": "18.0",
   "data": "2026-10-21",
-  "amministrazione": "amministrazione.html",
-  "gestionale": "amministrazione/index.html",
-  "backend": "Supabase",
-  "supabase_configurato": true,
-  "account_amministratore": "da_creare_e_abilitare",
-  "migrazione_v11": "applicata_20261019223351",
-  "ordine_anagrafiche": "allineato_all_allegato",
-  "revision": 15,
-  "date": "2026-10-21",
-  "public_project_pages": 14,
-  "performance": "CSS iniziale inline con hash CSP; foglio completo non bloccante in home; badge immediato; letture layout raggruppate; carosello continuo 20 px/s preservato",
-  "h1": "invariato",
-  "patch": "15.0",
-  "versione": "15.0",
-  "correzione_console": "font-src esplicito: self e fonts.gstatic.com; nessun nuovo font o script esterno",
-  "nuova_pagina": "servizi.html"
+  "novita": "Schede cantieri riservate con presenze, operai, attività e materiali collegati a Supabase. Sito pubblico v17 conservato."
 }

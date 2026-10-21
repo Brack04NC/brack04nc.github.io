@@ -162,9 +162,9 @@ main[id], .project-card[id], .content-card[id] { scroll-margin-top: var(--anchor
 .brand img {
   width: auto;
   height: 64px;
-  border: 1px solid var(--gray-100);
-  border-radius: 6px;
-  background: var(--white);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   object-fit: contain;
 }
 
@@ -569,7 +569,6 @@ body.photo-open { overflow: hidden; }
 
 .footer-columns > div { min-width: 0; }
 
-.footer-brand img { width: auto; height: 64px; margin-bottom: 16px; border-radius: 6px; background: var(--white); object-fit: contain; }
 
 .footer-brand > p { color: var(--gray-400); line-height: 1.625; }
 
@@ -1127,3 +1126,7 @@ body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
 .case-related li { padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; }
 .case-related p { margin-top: 10px; color: #475569; line-height: 1.6; }
 @media (min-width: 768px) { .case-related { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+/* Le card della home mostrano soltanto le foto; i dettagli restano nel dialogo. */
+.portfolio-carousel .project-caption[hidden]{display:none!important}
+.photo-case-link{display:inline-flex;align-items:center;min-height:44px;color:var(--secondary);text-underline-offset:4px;font-weight:600}

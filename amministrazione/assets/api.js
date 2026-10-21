@@ -1,5 +1,5 @@
-import {createClient} from '../vendor/supabase.js?v=ba2cf907944e';
-import {config} from '../config.js?v=ba2cf907944e';
+import {createClient} from '../vendor/supabase.js?v=f8ee9f823b48';
+import {config} from '../config.js?v=f8ee9f823b48';
 
 export function configurationError() {
   if (!config.supabaseUrl || !config.supabasePublishableKey) return 'Configurazione iniziale da completare. Consulta la guida GESTIONALE_E_GITHUB_PAGES.md inclusa nello ZIP e compila amministrazione/config.js.';
@@ -22,7 +22,7 @@ export function errorMessage(error) {
   if (error?.code==='40001'||m.includes('CONFLICT')) return 'Un altro accesso ha modificato questi dati. Annota le tue modifiche e ricarica prima di salvare.';
   if (error?.code==='23505') return 'Codice, targa o identificativo già presente. Ricarica e controlla prima di riprovare.';
   if (error?.code==='42501'||/JWT|token.*expired/i.test(m)) return 'Accesso scaduto o non autorizzato. Esci ed effettua nuovamente l’accesso; se persiste, verifica l’abilitazione dell’utente.';
-  if (error?.code==='PGRST202'||error?.code==='42P01') return 'Database non ancora configurato: esegui backend/01-schema.sql come indicato nella guida.';
+  if (error?.code==='PGRST202'||error?.code==='42P01'||error?.code==='42703') return 'Database non ancora configurato: consulta GESTIONALE_V18.md: verifica lo schema iniziale e le migrazioni backend/03-schede-operaio.sql e backend/04-schede-cantieri.sql.';
   if (error?.code==='23514'||error?.code==='23502'||error?.code==='22P02') return 'Valori non validi o incompleti. Controlla i campi e le quantità.';
   if (m.length>0 && m.length<500 && error?.code==='P0001') return m;
   return 'Operazione non riuscita. I dati non sono confermati: ricarica e verifica la configurazione o riprova.';

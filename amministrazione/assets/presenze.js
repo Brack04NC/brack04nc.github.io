@@ -1,14 +1,17 @@
-import {today,validDay,escapeHTML as esc,number,displayDate,timestamp,monthRange,summarize,csv,download,validateEntries} from './helpers.js?v=ba2cf907944e';
+import {today,validDay,escapeHTML as esc,number,displayDate,timestamp,monthRange,summarize,csv,download,validateEntries} from './helpers.js?v=f8ee9f823b48';
+import {siteNames,profileURL} from './registri.js?v=f8ee9f823b48';
 const COMPILERS=['Tecnico 1','Tecnico 2','Ufficio'];
 const compilerOf=row=>row.compiler||'Ufficio';
 const sameRegister=(a,b)=>a.day===b.day&&compilerOf(a)===compilerOf(b);
 
 export async function initAttendance(ctx) {
   const {$,client,check,allRows,masters,status,run,setDirty,canDiscard,refreshMasters}=ctx;
+  const requestedSite=new URLSearchParams(location.search).get('cantiere');
+  function siteLink(){const id=$('attendance-site').value;$('attendance-site-profile').hidden=!id;$('attendance-site-profile').href='cantieri.html?cantiere='+encodeURIComponent(id);}
   let loadedDay='',loadedCompiler='Ufficio',revision=0,entries=[],loading=false,siteRows=[];
   function totals(){
     const hours=entries.reduce((s,x)=>s+(Number(x.hours)||0),0);
-    $('attendance-totals').textContent=`${entries.filter(x=>x.present).length} presenti · ${entries.filter(x=>!x.present).length} assenti · ${number(hours)} ore · ${number(hours/8)} giorni equivalenti`;
+    $('attendance-totals').textContent=`${entries.filter(x=>x.present&&Number(x.hours)>0).length} presenti · ${entries.filter(x=>!x.present).length} assenti · ${number(hours)} ore · ${number(hours/8)} giorni equivalenti`;
   }
   function changed(){setDirty();$('save-state').textContent='Modifiche da salvare.';totals();}
   function filterSites(){
@@ -17,12 +20,12 @@ export async function initAttendance(ctx) {
     const visible=siteRows.filter(s=>matches.includes(s)||s.id===selected);
     $('attendance-site').innerHTML='<option value="">Non specificato</option>'+visible.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.active?'':' (archiviato)'}${!matches.includes(s)?' (selezionato)':''}</option>`).join('');
     $('attendance-site').value=selected;
-    $('site-results-count').textContent=`${matches.length} di ${siteRows.length} cantieri`;
+    siteLink();$('site-results-count').textContent=`${matches.length} di ${siteRows.length} cantieri`;
   }
   function render(){
     $('attendance-list').innerHTML=entries.length?entries.map(e=>{
       const p=masters.employees.find(x=>x.id===e.employee_id);
-      return `<div class="person-row ${e.present?'present':''}" data-employee="${esc(p.id)}"><label class="person-name"><input type="checkbox" data-present ${e.present?'checked':''}><span>${esc(p.name)}${p.active?'':' <span class="mini">(archiviato)</span>'}${p.code?`<br><span class="mini">${esc(p.code)}</span>`:''}</span></label><div><label class="hours-label" for="hours-${esc(p.id)}">Ore lavorate</label><input id="hours-${esc(p.id)}" data-hours type="number" value="${e.hours}" min="0.25" max="24" step="0.25" inputmode="decimal" aria-label="Ore di ${esc(p.name)}" ${e.present?'required':'disabled'}></div><div class="quick-hours"><button type="button" data-hours-preset="4" class="secondary small" aria-label="Imposta mezza giornata, 4 ore, per ${esc(p.name)}">½ · 4 h</button><button type="button" data-hours-preset="8" class="secondary small" aria-label="Imposta una giornata, 8 ore, per ${esc(p.name)}">1 · 8 h</button></div></div>`;
+      return `<div class="person-row ${e.present?'present':''}" data-employee="${esc(p.id)}"><div><label class="person-name"><input type="checkbox" data-present ${e.present?'checked':''}><span>${esc(p.name)}${p.active?'':' <span class="mini">(archiviato)</span>'}${p.code?`<br><span class="mini">${esc(p.code)}</span>`:''}</span></label><a class="person-profile-link" href="operaio.html?operaio=${encodeURIComponent(p.id)}&amp;giorno=${loadedDay}&amp;compilatore=${encodeURIComponent(loadedCompiler)}">Scheda e attività</a></div><div><label class="hours-label" for="hours-${esc(p.id)}">Ore lavorate</label><input id="hours-${esc(p.id)}" data-hours type="number" value="${e.hours}" min="0" max="24" step="0.25" inputmode="decimal" aria-label="Ore di ${esc(p.name)}" ${e.present?'required':'disabled'}></div><div class="quick-hours"><button type="button" data-hours-preset="4" class="secondary small" aria-label="Imposta mezza giornata, 4 ore, per ${esc(p.name)}">½ · 4 h</button><button type="button" data-hours-preset="8" class="secondary small" aria-label="Imposta una giornata, 8 ore, per ${esc(p.name)}">1 · 8 h</button></div></div>`;
     }).join(''):'<div class="empty">Nessun nominativo attivo. <a href="anagrafiche.html">Aggiungi il personale</a> prima di compilare la giornata.</div>';
     $('save-attendance').disabled=!entries.length||loading;totals();
   }
@@ -46,7 +49,7 @@ export async function initAttendance(ctx) {
       siteRows=masters.sites.filter(s=>s.active||s.id===record?.site_id);
       $('site-search').value='';
       $('attendance-site').innerHTML='<option value="">Non specificato</option>'+siteRows.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.active?'':' (archiviato)'}</option>`).join('');
-      $('attendance-site').value=record?.site_id||'';filterSites();
+      $('attendance-site').value=record?.site_id||(!record&&siteRows.some(s=>s.id===requestedSite)?requestedSite:'');filterSites();
       const weather=record?.weather||'';
       if(!Array.from($('weather').options).some(o=>o.value===weather)){const o=document.createElement('option');o.value=weather;o.textContent=weather;$('weather').append(o);}
       $('weather').value=weather;$('day-note').value=record?.notes||'';
@@ -69,6 +72,7 @@ export async function initAttendance(ctx) {
   $('attendance-day').addEventListener('change',changeRegister);
   $('attendance-compiler').addEventListener('change',changeRegister);
   $('site-search').addEventListener('input',filterSites);
+  $('attendance-site').addEventListener('change',siteLink);
   for(const id of ['attendance-site','weather','day-note'])$(id).addEventListener('input',changed);
   $('attendance-list').addEventListener('change',e=>{
     const row=e.target.closest('[data-employee]');if(!row)return;
@@ -82,7 +86,7 @@ export async function initAttendance(ctx) {
   });
   $('attendance-list').addEventListener('input',e=>{
     if(!e.target.matches('[data-hours]'))return;
-    const row=e.target.closest('[data-employee]');entries.find(x=>x.employee_id===row.dataset.employee).hours=e.target.value===''?NaN:Number(e.target.value);changed();
+    const row=e.target.closest('[data-employee]'),entry=entries.find(x=>x.employee_id===row.dataset.employee);entry.hours=e.target.value===''?NaN:Number(e.target.value);if(Number.isFinite(entry.hours)){entry.present=entry.hours>0;row.querySelector('[data-present]').checked=entry.present;row.classList.toggle('present',entry.present);}changed();
   });
   $('attendance-list').addEventListener('click',e=>{
     const button=e.target.closest('[data-hours-preset]');if(!button)return;
@@ -108,7 +112,7 @@ export async function initAttendance(ctx) {
 
 export async function initArchive(ctx){
   const {$,client,check,allRows,masters,status,run}=ctx;
-  let allEntries=[],allDays=[],rows=[],days=[],summary=[],month='';
+  let allEntries=[],allDays=[],rows=[],days=[],summary=[],worklogs=[],activities=[],month='';
   $('archive-month').value=today().slice(0,7);
   const site=id=>masters.sites.find(s=>s.id===id)?.name||'—';
   function render(){
@@ -118,21 +122,23 @@ export async function initArchive(ctx){
     summary=summarize(rows,masters.employees.filter(e=>e.active||rows.some(r=>r.employee_id===e.id)));
     const hours=summary.reduce((s,e)=>s+e.hours,0),present=summary.reduce((s,e)=>s+e.days,0);
     $('archive-stats').innerHTML=[['Registri visualizzati',days.length],['Presenze complessive',present],['Ore visualizzate',number(hours)]].map(([l,v])=>`<div class="stat"><span>${l}</span><strong>${v}</strong></div>`).join('');
-    $('month-summary').innerHTML=summary.length?`<div class="table-scroll" tabindex="0" role="region" aria-label="Riepilogo mensile"><table><thead><tr><th>Persona</th><th class="numeric">Presenze</th><th class="numeric">Ore</th><th class="numeric">Giorni eq.</th><th>Date e ore</th></tr></thead><tbody>${summary.map(e=>`<tr><td>${esc(e.name)}${e.code?`<br><span class="mini">${esc(e.code)}</span>`:''}</td><td class="numeric">${e.days}</td><td class="numeric">${number(e.hours)}</td><td class="numeric">${number(e.equivalent)}</td><td class="summary-dates">${rows.filter(r=>r.employee_id===e.id&&r.present).map(r=>esc(displayDate(r.day)+' · '+compilerOf(r)+' · '+number(r.hours)+' h')).join('<br>')||'—'}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nessun nominativo disponibile.</div>';
-    $('archive-days').innerHTML=days.length?`<ul class="selection-list">${days.map(d=>{const records=rows.filter(r=>sameRegister(r,d));return `<li><div><strong>${displayDate(d.day)} · ${esc(compilerOf(d))}</strong><p class="mini">${esc(site(d.site_id))} · ${esc(d.weather||'Meteo non indicato')} · ${records.filter(r=>r.present).length} presenti · ${number(records.reduce((s,r)=>s+Number(r.hours),0))} ore</p><p class="mini">${esc(d.notes||'Nessuna nota')}</p></div><a class="button secondary small" href="presenze.html?giorno=${d.day}&amp;compilatore=${encodeURIComponent(compilerOf(d))}">Apri</a></li>`;}).join('')}</ul>`:'<div class="empty">Nessun registro corrispondente ai filtri.</div>';
+    $('month-summary').innerHTML=summary.length?`<div class="table-scroll" tabindex="0" role="region" aria-label="Riepilogo mensile"><table><thead><tr><th>Persona</th><th class="numeric">Presenze</th><th class="numeric">Ore</th><th class="numeric">Giorni eq.</th><th>Date e ore</th></tr></thead><tbody>${summary.map(e=>`<tr><td><a href="${esc(profileURL(e.id,month+'-01',compiler||'Ufficio'))}">${esc(e.name)}</a>${e.code?`<br><span class="mini">${esc(e.code)}</span>`:''}</td><td class="numeric">${e.days}</td><td class="numeric">${number(e.hours)}</td><td class="numeric">${number(e.equivalent)}</td><td class="summary-dates">${rows.filter(r=>r.employee_id===e.id&&r.present&&Number(r.hours)>0).map(r=>esc(displayDate(r.day)+' · '+compilerOf(r)+' · '+number(r.hours)+' h')).join('<br>')||'—'}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nessun nominativo disponibile.</div>';
+    $('archive-days').innerHTML=days.length?`<ul class="selection-list">${days.map(d=>{const records=rows.filter(r=>sameRegister(r,d));return `<li><div><strong>${displayDate(d.day)} · ${esc(compilerOf(d))}</strong><p class="mini">${esc(site(d.site_id))} · ${esc(d.weather||'Meteo non indicato')} · ${records.filter(r=>r.present&&Number(r.hours)>0).length} presenti · ${number(records.reduce((s,r)=>s+Number(r.hours),0))} ore</p><p class="mini">${esc(d.notes||'Nessuna nota')}</p></div><a class="button secondary small" href="presenze.html?giorno=${d.day}&amp;compilatore=${encodeURIComponent(compilerOf(d))}">Apri</a></li>`;}).join('')}</ul>`:'<div class="empty">Nessun registro corrispondente ai filtri.</div>';
     $('export-attendance').disabled=!days.length;$('export-days').disabled=!days.length;
   }
   async function load(){
     const chosen=$('archive-month').value,[start,end]=monthRange(chosen);
     const result=await Promise.all([
       allRows(client,'days',q=>q.gte('day',start).lte('day',end).order('day',{ascending:false}).order('compiler')),
-      allRows(client,'attendance',q=>q.gte('day',start).lte('day',end).order('day').order('compiler').order('employee_id'))
+      allRows(client,'attendance',q=>q.gte('day',start).lte('day',end).order('day').order('compiler').order('employee_id')),
+      allRows(client,'worklogs',q=>q.gte('day',start).lte('day',end).order('day').order('compiler').order('employee_id')),
+      allRows(client,'activities',q=>q.gte('day',start).lte('day',end).order('day').order('compiler').order('employee_id'))
     ]).catch(e=>{$('archive-month').value=month||chosen;throw e;});
-    [allDays,allEntries]=result;month=chosen;render();
+    [allDays,allEntries,worklogs,activities]=result;month=chosen;render();
   }
   await load();
   $('archive-compiler').addEventListener('change',render);$('archive-search').addEventListener('input',render);
   $('month-form').addEventListener('submit',e=>{e.preventDefault();run(e.submitter,async()=>{await load();status('Riepilogo aggiornato.','success');});});
-  $('export-attendance').addEventListener('click',()=>download(`presenze-riepilogo-${month}.csv`,csv([['Mese','Filtro compilatore','Codice','Nominativo','Presenze','Ore','Giorni equivalenti (ore/8)','Date e ore'],...summary.map(e=>[month,$('archive-compiler').value||'Tutti',e.code,e.name,e.days,String(e.hours).replace('.',','),String(e.equivalent).replace('.',','),rows.filter(r=>r.employee_id===e.id&&r.present).map(r=>r.day+' '+compilerOf(r)+' '+number(r.hours)+' h').join(' | ')])]),'text/csv;charset=utf-8'));
-  $('export-days').addEventListener('click',()=>download(`presenze-giornaliere-${month}.csv`,csv([['Data','Compilatore','Codice','Nominativo','Presente','Ore','Cantiere','Meteo','Note'],...rows.map(r=>{const e=masters.employees.find(e=>e.id===r.employee_id),d=days.find(d=>sameRegister(d,r));return[r.day,compilerOf(r),e?.code,e?.name,r.present?'Sì':'No',String(r.hours).replace('.',','),site(d?.site_id),d?.weather,d?.notes];})]),'text/csv;charset=utf-8'));
+  $('export-attendance').addEventListener('click',()=>download(`presenze-riepilogo-${month}.csv`,csv([['Mese','Filtro compilatore','Codice','Nominativo','Presenze','Ore','Giorni equivalenti (ore/8)','Date e ore'],...summary.map(e=>[month,$('archive-compiler').value||'Tutti',e.code,e.name,e.days,String(e.hours).replace('.',','),String(e.equivalent).replace('.',','),rows.filter(r=>r.employee_id===e.id&&r.present&&Number(r.hours)>0).map(r=>r.day+' '+compilerOf(r)+' '+number(r.hours)+' h').join(' | ')])]),'text/csv;charset=utf-8'));
+  $('export-days').addEventListener('click',()=>download(`presenze-giornaliere-${month}.csv`,csv([['Data','Compilatore','Codice','Nominativo','Presente','Ore','Cantiere','Meteo','Note'],...rows.map(r=>{const e=masters.employees.find(e=>e.id===r.employee_id),d=days.find(d=>sameRegister(d,r));return[r.day,compilerOf(r),e?.code,e?.name,r.present&&Number(r.hours)>0?'Sì':'No',String(r.hours).replace('.',','),siteNames(r.employee_id,r.day,[r],days,worklogs,activities,masters),d?.weather,d?.notes];})]),'text/csv;charset=utf-8'));
 }

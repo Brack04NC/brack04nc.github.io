@@ -1,13 +1,13 @@
-import {escapeHTML as esc,unitLabel} from './helpers.js?v=ba2cf907944e';
+import {escapeHTML as esc,unitLabel} from './helpers.js?v=f8ee9f823b48';
 
 export async function initMasters(ctx){
   const {$,client,check,masters,status,run,setDirty,canDiscard,refreshMasters}=ctx;
-  let kind='employees',editing=null,newId=crypto.randomUUID(),seed=null;
+  let kind=['employees','sites','materials','locations'].includes(new URLSearchParams(location.search).get('tipo'))?new URLSearchParams(location.search).get('tipo'):'employees',editing=null,newId=crypto.randomUUID(),seed=null;
   const labels={employees:'personale',sites:'cantiere',materials:'materiale',locations:'ubicazione'};
   function render(){
     const search=$('master-search').value.toLocaleLowerCase('it');
     const rows=masters[kind].filter(x=>`${x.name} ${x.code||''} ${x.plate||''}`.toLocaleLowerCase('it').includes(search));
-    $('master-list').innerHTML=rows.length?`<ul class="selection-list">${rows.map(x=>`<li><div><strong>${esc(x.name)}</strong><p class="mini">${[x.code,x.plate,x.unit&&unitLabel(x.unit),x.kind,!x.active&&'Archiviato'].filter(Boolean).map(esc).join(' · ')}</p></div><button type="button" class="secondary small" data-edit="${esc(x.id)}" aria-label="Modifica ${esc(x.name)}">Modifica</button></li>`).join('')}</ul>`:'<div class="empty">Nessuna voce trovata. Aggiungila con il modulo qui sotto.</div>';
+    $('master-list').innerHTML=rows.length?`<ul class="selection-list">${rows.map(x=>`<li><div><strong>${esc(x.name)}</strong><p class="mini">${[x.code,x.plate,x.unit&&unitLabel(x.unit),x.kind,!x.active&&'Archiviato'].filter(Boolean).map(esc).join(' · ')}</p>${kind==='sites'?`<a class="person-profile-link" href="cantieri.html?cantiere=${encodeURIComponent(x.id)}">Scheda cantiere</a>`:''}${kind==='locations'&&x.site_id?`<a class="person-profile-link" href="cantieri.html?cantiere=${encodeURIComponent(x.site_id)}">Cantiere collegato</a>`:''}${kind==='employees'?`<a class="person-profile-link" href="operaio.html?operaio=${encodeURIComponent(x.id)}">Scheda operaio e calendario</a>`:''}</div><button type="button" class="secondary small" data-edit="${esc(x.id)}" aria-label="Modifica ${esc(x.name)}">Modifica</button></li>`).join('')}</ul>`:'<div class="empty">Nessuna voce trovata. Aggiungila con il modulo qui sotto.</div>';
   }
   function form(row=null){
     editing=row;newId=crypto.randomUUID();$('master-form').reset();
@@ -20,7 +20,7 @@ export async function initMasters(ctx){
     $('master-location-kind').value=row?.kind||'magazzino';$('master-plate').value=row?.plate||'';$('master-active').checked=row?.active??true;
     setDirty(false);
   }
-  render();form();
+  $('master-kind').value=kind;render();form();
   $('master-kind').addEventListener('change',()=>{if(!canDiscard()){$('master-kind').value=kind;return;}kind=$('master-kind').value;$('master-search').value='';form();render();});
   $('master-search').addEventListener('input',render);
   $('master-list').addEventListener('click',e=>{const btn=e.target.closest('[data-edit]');if(!btn||!canDiscard())return;form(masters[kind].find(x=>x.id===btn.dataset.edit));$('master-name').focus();});

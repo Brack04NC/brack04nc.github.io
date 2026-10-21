@@ -1,8 +1,14 @@
-import {configurationError,connect,check,errorMessage,allRows} from './api.js?v=ba2cf907944e';
-import {today,download} from './helpers.js?v=ba2cf907944e';
-import {initAttendance,initArchive} from './presenze.js?v=ba2cf907944e';
-import {initDepot} from './deposito.js?v=ba2cf907944e';
-import {initMasters} from './anagrafiche.js?v=ba2cf907944e';
+import {configurationError,connect,check,errorMessage,allRows} from './api.js?v=f8ee9f823b48';
+import {today,download} from './helpers.js?v=f8ee9f823b48';
+import {initAttendance,initArchive} from './presenze.js?v=f8ee9f823b48';
+import {initDepot} from './deposito.js?v=f8ee9f823b48';
+import {initMasters} from './anagrafiche.js?v=f8ee9f823b48';
+
+import {initReport} from './riepilogo.js?v=f8ee9f823b48';
+import {initWorker} from './operaio.js?v=f8ee9f823b48';
+import {initMaterials} from './materiali.js?v=f8ee9f823b48';
+
+import {initSites} from './cantieri.js?v=f8ee9f823b48';
 
 const $=id=>document.getElementById(id);
 const initialPageHTML=$('page-content').innerHTML;
@@ -53,7 +59,7 @@ async function enter(session) {
     $('sidebar').hidden=false;$('page-content').hidden=false;$('connection-badge').hidden=false;
     document.querySelector('.workspace').classList.remove('guest');
     const ctx={client,masters,$,status,run,setDirty,canDiscard,refreshMasters,check,allRows,user};
-    const init={index:initDashboard,presenze:initAttendance,deposito:initDepot,archivio:initArchive,anagrafiche:initMasters}[document.body.dataset.page];
+    const init={index:initDashboard,cantieri:initSites,presenze:initAttendance,deposito:initDepot,archivio:initArchive,anagrafiche:initMasters,riepilogo:initReport,operaio:initWorker,materiali:initMaterials}[document.body.dataset.page];
     if(!init)throw new Error('Pagina non valida');
     await init(ctx);ready=true;lastActivity=Date.now();
   } catch(e) {
@@ -73,7 +79,7 @@ async function initDashboard(ctx) {
     allRows(client,'days',q=>q.eq('day',day).order('compiler')),
     allRows(client,'attendance',q=>q.eq('day',day).order('employee_id'))
   ]);
-  const present=new Set(attendance.filter(e=>e.present).map(e=>e.employee_id)).size;
+  const present=new Set(attendance.filter(e=>e.present&&Number(e.hours)>0).map(e=>e.employee_id)).size;
   const hours=attendance.reduce((s,e)=>s+Number(e.hours),0);
   const stats=[['Presenti oggi',present,days.length?days.length+' registri salvati':'Giornata da compilare'],['Ore registrate',hours.toLocaleString('it-IT'),'Totale di oggi'],['Ubicazioni attive',masters.locations.filter(x=>x.active).length,'Magazzini, camion e cantieri']];
   $('dashboard-stats').replaceChildren(...stats.map(([label,value,hint])=>{const el=document.createElement('div');el.className='stat';const l=document.createElement('span'),v=document.createElement('strong'),h=document.createElement('span');l.textContent=label;v.textContent=value;h.textContent=hint;el.append(l,v,h);return el;}));

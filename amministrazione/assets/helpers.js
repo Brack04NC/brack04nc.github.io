@@ -22,7 +22,7 @@ export function summarize(rows, employees) {
   return employees.map(e=>{
     const entries=rows.filter(r=>r.employee_id===e.id);
     const hours=entries.reduce((s,r)=>s+Number(r.hours),0);
-    return {...e,days:new Set(entries.filter(r=>r.present).map(r=>r.day)).size,hours,equivalent:hours/8};
+    return {...e,days:new Set(entries.filter(r=>r.present&&Number(r.hours)>0).map(r=>r.day)).size,hours,equivalent:hours/8};
   });
 }
 export function csv(rows) {

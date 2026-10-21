@@ -1,4 +1,4 @@
-import {today,validDay,escapeHTML as esc,number,displayDate,timestamp,unitLabel,csv,download} from './helpers.js?v=ba2cf907944e';
+import {today,validDay,escapeHTML as esc,number,displayDate,timestamp,unitLabel,csv,download} from './helpers.js?v=f8ee9f823b48';
 
 export async function initDepot(ctx){
   const {$,client,check,allRows,masters,status,run,setDirty,refreshMasters}=ctx;
@@ -35,7 +35,7 @@ export async function initDepot(ctx){
       const rows=masters.locations.filter(l=>(!loc||l.id===loc)&&(l.active||quantity(m.id,l.id)>0));
       const total=rows.reduce((s,l)=>s+quantity(m.id,l.id),0);
       return `<article class="stock-card"><header><div><h3>${esc(m.name)}</h3><span class="mini">${esc(m.code)} · ${esc(unitLabel(m.unit))}</span></div><strong>${number(total)} ${esc(unitLabel(m.unit))}</strong></header><ul>${rows.map(l=>`<li><span>${esc(l.name)}${l.plate?' · '+esc(l.plate):''}<span class="mini"> (${esc(l.kind)})</span></span><strong>${number(quantity(m.id,l.id))}</strong></li>`).join('')}</ul></article>`;
-    }).join(''):'<div class="empty">Nessun materiale trovato. <a href="anagrafiche.html">Aggiungi i materiali e i camion</a> nelle anagrafiche.</div>';
+    }).join(''):'<div class="empty">Nessun materiale trovato. <a href="materiali.html">Aggiungi i materiali</a> nelle anagrafiche.</div>';
   }
   async function refresh(){
     await refreshMasters();
@@ -87,7 +87,7 @@ export async function initDepot(ctx){
     try{await refresh();await loadHistory(true);}catch{status('Movimento salvato. L’aggiornamento delle giacenze non è riuscito: premi “Aggiorna giacenze”.','warning');}
   }
   $('movement-day').value=today();$('history-from').value=today().slice(0,7)+'-01';$('history-to').value=today();
-  await refresh();typeChanged();await loadHistory();
+  await refresh();const requestedMaterial=new URLSearchParams(location.search).get('materiale');if(masters.materials.some(m=>m.id===requestedMaterial&&m.active)){$('movement-material').value=requestedMaterial;$('stock-search').value=material(requestedMaterial).code;renderStock();}const requestedLocation=new URLSearchParams(location.search).get('ubicazione');if(masters.locations.some(l=>l.id===requestedLocation)){$('stock-location').value=requestedLocation;if(masters.locations.some(l=>l.id===requestedLocation&&l.active))$('movement-destination').value=requestedLocation;renderStock();}typeChanged();await loadHistory();
   $('movement-type').addEventListener('change',typeChanged);
   for(const id of ['movement-material','movement-source'])$(id).addEventListener('change',available);
   $('movement-form').addEventListener('input',()=>setDirty());
