@@ -1,7 +1,7 @@
 {
   "sito": "Ponteggi Srls",
   "revisione": 14,
-  "data": "2026-10-20",
+  "data": "2026-10-21",
   "amministrazione": "amministrazione.html",
   "gestionale": "amministrazione/index.html",
   "backend": "Supabase",
@@ -10,10 +10,11 @@
   "migrazione_v11": "applicata_20261019223351",
   "ordine_anagrafiche": "allineato_all_allegato",
   "revision": 14,
-  "date": "2026-10-20",
+  "date": "2026-10-21",
   "public_project_pages": 14,
   "performance": "CSS iniziale inline con hash CSP; foglio completo non bloccante in home; badge immediato; letture layout raggruppate; carosello continuo 20 px/s preservato",
   "h1": "invariato",
-  "patch": "14.0",
-  "versione": "14.0"
+  "patch": "14.1",
+  "versione": "14.1",
+  "correzione_console": "font-src esplicito: self e fonts.gstatic.com; nessun nuovo font o script esterno"
 }
