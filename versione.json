@@ -1,5 +1,5 @@
 {
-  "versione": "18.0",
-  "data": "2026-10-21",
-  "novita": "Schede cantieri riservate con presenze, operai, attività e materiali collegati a Supabase. Sito pubblico v17 conservato."
+  "versione": "20.4",
+  "data": "2026-11-12",
+  "novita": "Firma Firmato DoubleN nei footer pubblici, con popup dei contatti e fallback senza JavaScript. Include le modifiche precedenti."
 }

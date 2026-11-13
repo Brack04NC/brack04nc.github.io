@@ -7,6 +7,7 @@
 :root {
   --primary: #0f172a;
   --secondary: #facc15;
+  --accent-text-on-light: #715700;
   --white: #fff;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
@@ -335,7 +336,7 @@ body:has(.mobile-menu[open]) { overflow: hidden; }
 
 .section-heading--centered { max-width: 672px; margin: 0 auto 64px; text-align: center; }
 
-.eyebrow { margin-bottom: 12px; color: #facc15; font-size: 14px; line-height: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.eyebrow { margin-bottom: 12px; color: var(--accent-text-on-light); font-size: 14px; line-height: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
 
 .section-title { font-size: 30px; line-height: 36px; font-weight: 700; }
 
@@ -571,6 +572,19 @@ body.photo-open { overflow: hidden; }
 
 
 .footer-brand > p { color: var(--gray-400); line-height: 1.625; }
+
+.footer-social-links { display: flex; flex-wrap: wrap; gap: 16px; padding-top: 8px; margin-top: 8px; }
+.footer-social-links a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; flex: 0 0 44px; border-radius: 50%;
+  background: rgb(255 255 255 / .05); color: var(--white);
+  transition: background-color .15s ease, color .15s ease;
+}
+.footer-social-links a:hover, .footer-social-links a:focus-visible { background: var(--secondary); color: var(--primary); }
+.footer-social-links a:focus-visible { outline-color: var(--secondary); }
+@media (prefers-reduced-motion: reduce) {
+  .footer-social-links a { transition: none; }
+}
 
 .footer-title { display: inline-block; margin-bottom: 24px; padding-bottom: 8px; border-bottom: 1px solid rgb(250 204 21 / .3); font-size: 18px; line-height: 28px; font-weight: 700; }
 
@@ -934,7 +948,7 @@ html { scroll-behavior: auto; }
 
 .footer-bottom { color: var(--gray-400); }
 
-.page-eyebrow--compact { color: #715700; }
+.page-eyebrow--compact { color: var(--accent-text-on-light); }
 
 .field-help, .form-next-step { margin-top: 8px; color: var(--gray-600); font-size: 14px; line-height: 1.6; }
 
@@ -1130,3 +1144,113 @@ body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
 /* Le card della home mostrano soltanto le foto; i dettagli restano nel dialogo. */
 .portfolio-carousel .project-caption[hidden]{display:none!important}
 .photo-case-link{display:inline-flex;align-items:center;min-height:44px;color:var(--secondary);text-underline-offset:4px;font-weight:600}
+
+/* V20: mappa esterna su richiesta, senza connessioni preventive. */
+.map-placeholder { min-height: 340px; padding: 28px 20px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 14px; background: var(--gray-50); }
+.map-placeholder > .icon { width: 36px; height: 36px; }
+.map-placeholder h3 { font-size: 24px; }
+.map-placeholder p { color: var(--gray-700); font-size: 14px; line-height: 1.6; }
+.map-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.map-actions .button { min-height: 44px; padding: 12px 16px; font-size: 14px; text-align: center; }
+.map-actions .button-outline { border: 1px solid var(--primary); background: transparent; color: var(--primary); }
+.map-fallback > .text-link { display: inline-block; margin-block: 6px; }
+.map-fallback button.text-link { border: 0; background: transparent; padding: 6px 0; font: inherit; text-decoration: underline; min-height: 44px; }
+.no-js .map-choice { display: none; }
+#mappa-privacy { scroll-margin-top: var(--anchor-offset); }
+
+/* Crediti DoubleN — kit allegato, firma e popup locali. */
+/* Firma DoubleN: il testo "Firmato" è centrato rispetto al blocco logo/nome. */
+.dn-signature {
+  --dn-signature-ink: #12315a;
+  --dn-signature-muted: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  max-width: 100%;
+  margin: 0;
+  padding: 5px 2px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--dn-signature-muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+}
+.dn-signature * { box-sizing: border-box; }
+.dn-signature__prefix { font-size: 11.5px; line-height: 1.4; }
+.dn-signature__lockup { display: grid; justify-items: center; align-content: center; gap: 3px; }
+.dn-signature__mark { display: block; width: 30px; height: 18px; }
+.dn-signature__name { color: var(--dn-signature-ink); font-size: 11px; font-weight: 750; line-height: 1; letter-spacing: -.025em; }
+.dn-signature:hover .dn-signature__name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.dn-signature:focus-visible { outline: 2px solid var(--dn-signature-ink); outline-offset: 4px; }
+.dn-signature--dark { --dn-signature-ink: #f8fafc; --dn-signature-muted: #cbd5e1; }
+
+/* Il popup è indipendente dal tema del sito che ospita la firma. */
+.dn-contact-dialog, .dn-contact-dialog * { box-sizing: border-box; }
+.dn-contact-dialog {
+  width: min(460px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #dbe3ec;
+  border-radius: 18px;
+  background: #f8fafc;
+  color: #0b1f3a;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  color-scheme: light;
+  box-shadow: 0 28px 100px #0b1f3a40;
+}
+.dn-contact-dialog::backdrop { background: #0b1f3aa6; }
+.dn-contact-dialog__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px 0; }
+.dn-contact-dialog__brand { display: flex; align-items: center; gap: 10px; color: #12315a; }
+.dn-contact-dialog__brand svg { display: block; width: 34px; height: 20.4px; flex: 0 0 34px; }
+.dn-contact-dialog__brand strong { display: block; font-size: 15px; font-weight: 750; line-height: 1.2; letter-spacing: -.025em; }
+.dn-contact-dialog__brand small { display: block; margin-top: 3px; color: #475569; font-size: 9px; line-height: 1.3; letter-spacing: .12em; text-transform: uppercase; }
+.dn-contact-dialog__close { display: grid; place-items: center; width: 40px; height: 40px; flex: 0 0 40px; padding: 0; border: 1px solid #dbe3ec; border-radius: 50%; background: #fff; color: #12315a; cursor: pointer; }
+.dn-contact-dialog__close:hover { background: #eaf0f6; }
+.dn-contact-dialog__close svg { width: 17px; height: 17px; }
+.dn-contact-dialog__body { padding: 20px 24px 24px; }
+.dn-contact-dialog__eyebrow { margin: 0 0 9px; color: #b9470b; font-size: 10px; font-weight: 750; line-height: 1.4; letter-spacing: .11em; text-transform: uppercase; }
+.dn-contact-dialog__title { margin: 0 0 12px; color: #0b1f3a; font-family: inherit; font-size: clamp(25px, 6vw, 30px); font-weight: 750; line-height: 1.15; letter-spacing: -.045em; }
+.dn-contact-dialog__intro { margin: 0 0 20px; color: #475569; font-size: 13px; line-height: 1.65; }
+.dn-contact-dialog__contacts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 0 18px; }
+.dn-contact-card { display: flex; flex-direction: column; justify-content: center; gap: 10px; min-width: 0; min-height: 86px; margin: 0; padding: 13px; border: 1px solid #dbe3ec; border-radius: 10px; background: #fff; color: #12315a; text-decoration: none; }
+a.dn-contact-card:hover { border-color: #12315a; background: #f0f5fa; text-decoration: none; }
+.dn-contact-card__label { display: flex; align-items: center; gap: 7px; color: #475569; font-size: 10px; font-weight: 650; line-height: 1.25; letter-spacing: .035em; text-transform: uppercase; }
+.dn-contact-card__label svg { display: block; width: 15px; height: 15px; flex: 0 0 15px; }
+.dn-contact-card__value { display: block; overflow-wrap: anywhere; color: #12315a; font-size: 12px; font-weight: 650; line-height: 1.4; }
+.dn-contact-card--pending { background: #f1f5f9; }
+.dn-contact-card--pending .dn-contact-card__value { color: #56657a; font-weight: 400; }
+.dn-contact-dialog__cta { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; min-height: 46px; padding: 12px 16px; border: 0; border-radius: 9px; background: #f97316; color: #0b1f3a; font-size: 13px; font-weight: 750; line-height: 1.4; text-align: center; text-decoration: none; }
+.dn-contact-dialog__cta:hover { background: #fb923c; color: #0b1f3a; text-decoration: none; }
+.dn-contact-dialog__cta svg { display: block; width: 17px; height: 17px; flex: 0 0 17px; }
+.dn-contact-dialog__note { margin: 12px 0 0; color: #56657a; font-size: 10.5px; line-height: 1.5; text-align: center; }
+.dn-contact-dialog a:focus-visible, .dn-contact-dialog button:focus-visible { outline: 2px solid #12315a; outline-offset: 3px; }
+@media (max-width: 360px) {
+  .dn-contact-dialog__header { padding: 16px 16px 0; }
+  .dn-contact-dialog__body { padding: 16px; }
+  .dn-contact-dialog__contacts { gap: 8px; }
+  .dn-contact-card { padding: 11px; }
+}
+
+/* Integrazione nella fascia finale del footer di Ponteggi Srls. */
+.footer-credit { display: flex; justify-content: center; margin-top: 12px; padding-inline: 16px; }
+.dn-signature[hidden] { display: none !important; }
+.dn-contact-dialog__close { width: 44px; height: 44px; flex-basis: 44px; }
+@media (min-width: 768px) { .footer-credit { justify-content: flex-end; margin-top: 8px; } }

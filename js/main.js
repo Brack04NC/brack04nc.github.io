@@ -230,15 +230,41 @@ if (photoDialog && typeof photoDialog.showModal === "function" && photoLinks.len
   });
 }
 
-/* Mappa: nessuna richiesta a Google finché la sezione è lontana.
-   Senza JS resta disponibile l'iframe lazy nel fallback noscript. */
-document.querySelectorAll('iframe[data-map-src]').forEach(map => {
-  const load = () => { map.src = map.dataset.mapSrc; delete map.dataset.mapSrc; };
-  if (!window.IntersectionObserver) { load(); return; }
-  const observer = new IntersectionObserver(entries => {
-    if (entries.some(entry => entry.isIntersecting)) { load(); observer.disconnect(); }
-  }, {rootMargin: '400px 0px'});
-  observer.observe(map);
+/* Mappa facoltativa: nessun iframe, cookie o collegamento a Google
+   prima dell'azione esplicita. Nessuna preferenza salvata nel browser. */
+document.querySelectorAll('[data-private-map]').forEach(container => {
+  const placeholder = container.querySelector('[data-map-placeholder]');
+  const host = container.querySelector('[data-map-host]');
+  const enable = container.querySelector('[data-map-enable]');
+  const decline = container.querySelector('[data-map-decline]');
+  const disable = container.querySelector('[data-map-disable]');
+  const status = container.querySelector('[data-map-status]');
+  const reset = (focus = false) => {
+    host.replaceChildren(); host.hidden = true; placeholder.hidden = false; disable.hidden = true;
+    container.dataset.mapState = 'disabled';
+    status.textContent = 'Mappa disattivata: nessun collegamento a Google. Se l’hai già attivata, puoi eliminare i cookie di Google dalle impostazioni del browser.';
+    if (focus) enable.focus({ preventScroll: true });
+  };
+  enable.addEventListener('click', () => {
+    if (host.querySelector('iframe')) return;
+    const url = new URL(container.dataset.mapUrl);
+    if (url.origin !== 'https://www.google.com' || url.pathname !== '/maps') return;
+    const frame = document.createElement('iframe');
+    frame.title = 'Ponteggi Srls — scheda Google Maps dell’attività';
+    frame.width = '600'; frame.height = '380'; frame.referrerPolicy = 'no-referrer';
+    frame.allowFullscreen = true; frame.src = url.href;
+    host.replaceChildren(frame); host.hidden = false; placeholder.hidden = true; disable.hidden = false;
+    container.dataset.mapState = 'enabled';
+    status.textContent = 'Google Maps attivato per questa pagina. Puoi disattivarlo in qualsiasi momento.';
+    disable.focus({ preventScroll: true });
+  });
+  decline.addEventListener('click', () => {
+    status.textContent = 'La mappa rimane disattivata. Puoi continuare a navigare e contattarci.';
+    status.setAttribute('tabindex', '-1'); status.focus({ preventScroll: true });
+  });
+  disable.addEventListener('click', () => reset(true));
+  // Anche il ritorno da bfcache richiede una nuova attivazione esplicita.
+  window.addEventListener('pagehide', () => reset());
 });
 
 /* Nastro continuo: velocità costante in pixel al secondo, senza soste.
@@ -385,7 +411,7 @@ document.querySelectorAll("[data-copy]").forEach(button => {
       if (navigator.clipboard?.writeText) {
         try { await navigator.clipboard.writeText(button.dataset.copy); copied = true; } catch { copied = legacyCopy(button.dataset.copy); }
       } else copied = legacyCopy(button.dataset.copy);
-      if (request === copyRequest) announceCopy(copied ? button.dataset.copySuccess : "Copia non riuscita. Seleziona il contatto e copialo manualmente.", !copied);
+      if (request === copyRequest) announceCopy(copied ? button.dataset.copySuccess : (button.dataset.copyError || "Copia non riuscita. Seleziona il contatto e copialo manualmente."), !copied);
     } finally { button.disabled = false; }
   });
 });
@@ -414,7 +440,7 @@ if (form && window.fetch) {
     const controller = new AbortController(), timeout = window.setTimeout(() => controller.abort(), 20000);
     try {
       const response = await fetch(form.action.replace("formsubmit.co/", "formsubmit.co/ajax/"), {
-        method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(payload), signal: controller.signal
+        method: "POST", credentials: "omit", referrerPolicy: "strict-origin", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(payload), signal: controller.signal
       });
       const result = await response.json();
       if (!response.ok || (result.success !== true && result.success !== "true")) throw new Error("Invio non confermato");
